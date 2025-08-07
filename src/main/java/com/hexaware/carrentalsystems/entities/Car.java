@@ -1,6 +1,10 @@
 package com.hexaware.carrentalsystems.entities;
 import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +25,11 @@ public class Car {
     private Availability availability;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "car-reservation")
     private List<Reservation> reservations;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "car-feedback")
     private List<Feedback> feedbacks;
 
     public enum Availability {

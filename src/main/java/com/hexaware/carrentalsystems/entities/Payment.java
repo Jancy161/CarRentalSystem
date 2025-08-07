@@ -1,6 +1,12 @@
 package com.hexaware.carrentalsystems.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
 
 @Entity
 @Table(name = "payments")
@@ -11,6 +17,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "reservation_id")
+    @JsonBackReference(value = "reservation-payment")
     private Reservation reservation;
 
     private double amount;
@@ -30,54 +37,6 @@ public class Payment {
         SUCCESS,
         FAILED
     }
-    
-    public Payment() {}
-
-	public int getPaymentId() {
-		return paymentId;
-	}
-
-	public void setPaymentId(int paymentId) {
-		this.paymentId = paymentId;
-	}
-
-	public Reservation getReservation() {
-		return reservation;
-	}
-
-	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public Method getMethod() {
-		return method;
-	}
-
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
-	@Override
-	public String toString() {
-		return "Payment [paymentId=" + paymentId + ", reservation=" + reservation + ", amount=" + amount + ", method="
-				+ method + ", status=" + status + "]";
-	}
     
     
 }

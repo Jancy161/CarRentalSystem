@@ -6,9 +6,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.carrentalsystems.dto.FeedbackDto;
+import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.entities.Feedback;
+import com.hexaware.carrentalsystems.entities.User;
+import com.hexaware.carrentalsystems.exceptions.CarNotFoundException;
 import com.hexaware.carrentalsystems.exceptions.FeedbackNotFoundException;
+import com.hexaware.carrentalsystems.exceptions.UserNotFoundException;
+import com.hexaware.carrentalsystems.repository.ICarRepository;
 import com.hexaware.carrentalsystems.repository.IFeedbackRepository;
+import com.hexaware.carrentalsystems.repository.IUserRepository;
 
 @Service
 public class FeedbackServiceImp implements IFeedbackService {
@@ -16,33 +23,54 @@ public class FeedbackServiceImp implements IFeedbackService {
     @Autowired
     private IFeedbackRepository repo;
 
+    @Autowired
+    private IUserRepository userRepo;
+
+    @Autowired
+    private ICarRepository carRepo;
+    
     @Override
-    public Feedback addFeedback(Feedback feedback) {
+    public Feedback addFeedback(FeedbackDto dto) {
+    	
+        Feedback feedback = new Feedback();
+        feedback.setFeedbackId(dto.getFeedbackId());
+        feedback.setRating(dto.getRating());
+        feedback.setComment(dto.getComment());
+        
+        User user = userRepo.findById(dto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + dto.getUserId()));
+        Car car = carRepo.findById(dto.getCarId())
+                .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + dto.getCarId()));
+
+        feedback.setUser(user);
+        feedback.setCar(car);
         return repo.save(feedback);
     }
 
+
+   
     @Override
     public List<Feedback> getAllFeedback() {
         return repo.findAll();
     }
 
     @Override
-    public Feedback getFeedbackById(int id) {
-        Optional<Feedback> feedback = repo.findById(id);
+    public Feedback getFeedbackById(int feedbackId) {
+        Optional<Feedback> feedback = repo.findById(feedbackId);
         if (feedback.isPresent()) {
             return feedback.get();
         } else {
-            throw new FeedbackNotFoundException("Feedback not found with id: " + id);
+            throw new FeedbackNotFoundException("Feedback not found with id: " + feedbackId);
         }
     }
 
     @Override
-    public String deleteFeedback(int id) {
-        if (repo.existsById(id)) {
-            repo.deleteById(id);
+    public String deleteFeedback(int feedbackId) {
+        if (repo.existsById(feedbackId)) {
+            repo.deleteById(feedbackId);
             return "Feedback deleted";
         } else {
-            throw new FeedbackNotFoundException("Feedback not found with id: " + id);
+            throw new FeedbackNotFoundException("Feedback not found with id: " + feedbackId);
         }
     }
 }

@@ -6,18 +6,35 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.carrentalsystems.dto.PaymentDto;
 import com.hexaware.carrentalsystems.entities.Payment;
+import com.hexaware.carrentalsystems.entities.Reservation;
 import com.hexaware.carrentalsystems.repository.IPaymentRepository;
+import com.hexaware.carrentalsystems.repository.IReservationRepository;
 import com.hexaware.carrentalsystems.exceptions.PaymentNotFoundException;
+import com.hexaware.carrentalsystems.exceptions.ReservationNotFoundException;
 
 @Service
 public class PaymentServiceImp implements IPaymentService {
 
     @Autowired
     IPaymentRepository PaymentRepo;
+    
+    @Autowired
+    IReservationRepository repo;
 
     @Override
-    public Payment addPayment(Payment payment) {
+    public Payment addPayment(PaymentDto dto) {
+        Reservation reservation = repo.findById(dto.getReservationId())
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+
+        Payment payment = new Payment();
+        payment.setPaymentId(dto.getPaymentId());
+        payment.setAmount(dto.getAmount());
+        payment.setMethod(dto.getMethod());
+        payment.setStatus(dto.getStatus());
+        payment.setReservation(reservation);
+
         return PaymentRepo.save(payment);
     }
 

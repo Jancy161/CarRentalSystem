@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.hexaware.carrentalsystems.dto.ReservationDto;
 import com.hexaware.carrentalsystems.entities.Reservation;
 import com.hexaware.carrentalsystems.service.IReservationService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -15,9 +18,9 @@ public class ReservationRestController {
     @Autowired
     private IReservationService service;
 
-    @PostMapping("/insert")
-    public Reservation addReservation(@RequestBody Reservation reservation) {
-        return service.addReservation(reservation);
+    @PostMapping("/add")
+    public Reservation add(@RequestBody @Valid ReservationDto dto) {
+        return service.addReservation(dto);
     }
 
     @PutMapping("/update")

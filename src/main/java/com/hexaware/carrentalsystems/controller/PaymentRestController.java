@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.hexaware.carrentalsystems.dto.PaymentDto;
 import com.hexaware.carrentalsystems.entities.Payment;
 import com.hexaware.carrentalsystems.service.IPaymentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -16,8 +19,8 @@ public class PaymentRestController {
     IPaymentService service;
 
     @PostMapping("/insert")
-    public Payment addPayment(@RequestBody Payment payment) {
-        return service.addPayment(payment);
+    public Payment addPayment(@RequestBody @Valid PaymentDto dto) {
+        return service.addPayment(dto);
     }
 
     @GetMapping("/getbyid/{id}")

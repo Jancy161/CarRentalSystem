@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "payments")
 public class Payment {
     @Id
-    
+  
     private int paymentId;
+
 
     @OneToOne
     @JoinColumn(name = "reservation_id")

@@ -54,7 +54,7 @@ public class ReservationRestController {
         return service.getAllReservations();
     }
     
-    @GetMapping("/getresgreaterthan/{totalAmount")
+    @GetMapping("/getresgreaterthan/{totalAmount}")
     public List<Reservation> getByReservationGreaterThan(@PathVariable int totalAmount){
     	
     	return service.getByReservationGreaterThan(totalAmount);

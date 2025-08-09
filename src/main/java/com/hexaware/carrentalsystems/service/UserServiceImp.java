@@ -67,15 +67,15 @@ public class UserServiceImp implements IUserService {
     }
 
     @Override
-    public User getByEmail(String email) {
+    public List <User> getByEmail(String email) {
         log.info("Fetching user by email: {}", email);
 
-        return UserRepo.findByEmail(email)
-                   .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return UserRepo.findByEmail(email);
+                  
     }
 
     @Override
-    public List<User> getByName(String name) {
+    public User getByName(String name) {
         log.info("Fetching users by name: {}", name);
 
         return UserRepo.findByName(name);
@@ -91,6 +91,6 @@ public class UserServiceImp implements IUserService {
 	@Override
 	public List<User> getByNameStartingWith(String name) {
 		
-		return UserRepo.findByNameStartingwith(name);
+		return UserRepo.findByNameStartingWith(name);
 	}
 }

@@ -26,10 +26,10 @@ public class FeedbackServiceImp implements IFeedbackService {
     private IFeedbackRepository repo;
 
     @Autowired
-    private IUserRepository userRepo;
+    private IUserRepository UserRepo;
 
     @Autowired
-    private ICarRepository carRepo;
+    private ICarRepository CarRepo;
     
     @Override
     public Feedback addFeedback(FeedbackDto dto) {
@@ -39,9 +39,9 @@ public class FeedbackServiceImp implements IFeedbackService {
         feedback.setRating(dto.getRating());
         feedback.setComment(dto.getComment());
         
-        User user = userRepo.findById(dto.getUserId())
+        User user = UserRepo.findById(dto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + dto.getUserId()));
-        Car car = carRepo.findById(dto.getCarId())
+        Car car = CarRepo.findById(dto.getCarId())
                 .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + dto.getCarId()));
 
         feedback.setUser(user);

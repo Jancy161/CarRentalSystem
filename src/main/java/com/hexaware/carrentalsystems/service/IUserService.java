@@ -10,8 +10,8 @@ public interface IUserService {
     public User updateUser(User user);
     public User getByUserId(int userId);
     public String deleteByUserId(int userId);
-    User getByEmail(String email);
-    List<User> getByName(String name);
+    List <User> getByEmail(String email);
+    User getByName(String name);
     List<User> getAllUsers();
     List<User> getByNameStartingWith(String name);
 }

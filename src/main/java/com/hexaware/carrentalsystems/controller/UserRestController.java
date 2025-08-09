@@ -51,14 +51,14 @@ public class UserRestController {
     }
 
     @GetMapping("/getbyemail/{email}")
-    public User getByEmail(@PathVariable String email) {
+    public List<User> getByEmail(@PathVariable String email) {
         log.info("Received request to fetch user by email: {}", email);
 
         return service.getByEmail(email);
     }
 
     @GetMapping("/getbyname/{name}")
-    public List<User> getByName(@PathVariable String name) {
+    public User getByName(@PathVariable String name) {
         log.info("Received request to fetch users by name: {}", name);
 
         return service.getByName(name);

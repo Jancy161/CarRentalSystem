@@ -10,4 +10,5 @@ public interface IPaymentService {
     public Payment getPaymentById(int paymentId);
     public List<Payment> getAllPayments();
     public String deletePayment(int paymentId);
+    public List<Payment> getByMethodAndStatus(String method, String status);
 }

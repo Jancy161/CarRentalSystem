@@ -10,7 +10,7 @@ public interface IFeedbackService {
     List<Feedback> getAllFeedback();
     Feedback getFeedbackById(int feedbackId);
     String deleteFeedback(int feedbackId);
-    
+    List<Feedback>getFeedbacksOrderByRating ();
 }
 
    

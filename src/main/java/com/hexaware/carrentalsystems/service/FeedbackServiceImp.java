@@ -17,6 +17,8 @@ import com.hexaware.carrentalsystems.repository.ICarRepository;
 import com.hexaware.carrentalsystems.repository.IFeedbackRepository;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class FeedbackServiceImp implements IFeedbackService {
 
@@ -31,7 +33,7 @@ public class FeedbackServiceImp implements IFeedbackService {
     
     @Override
     public Feedback addFeedback(FeedbackDto dto) {
-    	
+    	log.info("Adding feedback...");
         Feedback feedback = new Feedback();
         feedback.setFeedbackId(dto.getFeedbackId());
         feedback.setRating(dto.getRating());
@@ -51,11 +53,15 @@ public class FeedbackServiceImp implements IFeedbackService {
    
     @Override
     public List<Feedback> getAllFeedback() {
+        log.info("Fetching all feedback records");
+
         return repo.findAll();
     }
 
     @Override
     public Feedback getFeedbackById(int feedbackId) {
+        log.info("Fetching feedback with ID: {}", feedbackId);
+
         Optional<Feedback> feedback = repo.findById(feedbackId);
         if (feedback.isPresent()) {
             return feedback.get();
@@ -66,6 +72,8 @@ public class FeedbackServiceImp implements IFeedbackService {
 
     @Override
     public String deleteFeedback(int feedbackId) {
+        log.info("Deleting feedback with ID: {}", feedbackId);
+
         if (repo.existsById(feedbackId)) {
             repo.deleteById(feedbackId);
             return "Feedback deleted";
@@ -73,4 +81,13 @@ public class FeedbackServiceImp implements IFeedbackService {
             throw new FeedbackNotFoundException("Feedback not found with id: " + feedbackId);
         }
     }
+    
+    @Override
+    public  List<Feedback> getFeedbacksOrderByRating() {
+    	return repo.findFeedbacksOrderByRating();
+    	
+    }
+
+
+
 }

@@ -11,7 +11,8 @@ import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.service.ICarService;
 import com.hexaware.carrentalsystems.dto.CarDto;
 import jakarta.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 @RequestMapping("/api/cars")
 public class CarRestController {
@@ -24,6 +25,7 @@ public class CarRestController {
 
 	    @PostMapping("/insert")
 	    public Car addCar(@RequestBody @Valid CarDto dto) {
+	    	 log.info("Received request to add new car: {}", dto);
 	        return service.addCar(dto);
 	    }
 	    
@@ -31,26 +33,36 @@ public class CarRestController {
 
 	    @PutMapping("/update")
 	    public Car updateCar(@RequestBody Car car) {
+	        log.info("Received request to update car with ID: {}", car.getCarId());
+
 	        return service.updateCar(car);
 	    }
 
 	    @GetMapping("/getbyid/{carId}")
 	    public Car getByCarId(@PathVariable int carId) {
+	        log.info("Received request to fetch car by ID: {}", carId);
+
 	        return service.getByCarId(carId);
 	    }
 
 	    @GetMapping("/getall")
 	    public List<Car> getAllCars() {
+	    	 log.info("Fetching all cars");
 	        return service.getAllCars();
 	    }
 
 	    @DeleteMapping("/deletebyid/{carId}")
 	    public String deleteByCarId(@PathVariable int carId) {
+	        log.info("Received request to delete car with ID: {}", carId);
+
 	        return service.deleteByCarId(carId);
 	    }
 
 	    @GetMapping("/getbybrand/{brand}")
 	    public List<Car> getByBrand(@PathVariable String brand) {
+	        log.info("Fetching cars by brand: {}", brand);
+
+	    	
 	        return service.getByBrand(brand);
 	    }
 
@@ -58,11 +70,15 @@ public class CarRestController {
 
 	    @GetMapping("/getbyprice/{price}")
 	    public List<Car> getByPriceLessThan(@PathVariable double price) {
+	        log.info("Fetching cars with price less than {}", price);
+
 	        return service.getByPriceLessThan(price);
 	    }
 
 	    @GetMapping("/getaffordable/orderbyprice/{price}")
 	    public List<Car> getAffordableSorted(@PathVariable double price) {
+	        log.info("Fetching affordable cars sorted by price, price threshold: {}", price);
+
 	        return service.findAffordableCarsSortedByPrice(price);
 	    }
 	}

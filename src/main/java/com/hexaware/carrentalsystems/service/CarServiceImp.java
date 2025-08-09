@@ -1,6 +1,7 @@
 package com.hexaware.carrentalsystems.service;
 import com.hexaware.carrentalsystems.dto.CarDto;
 import com.hexaware.carrentalsystems.entities.Car;
+import com.hexaware.carrentalsystems.entities.Car.Availability;
 import com.hexaware.carrentalsystems.exceptions.CarNotFoundException;
 
 import java.util.List;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.hexaware.carrentalsystems.repository.ICarRepository;
 
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @Service
-public  class CarServiceImp implements ICarService {
+public class CarServiceImp implements ICarService {
 	 @Autowired
 	    ICarRepository CarRepo;
 	 
@@ -28,14 +31,13 @@ public  class CarServiceImp implements ICarService {
 				car.setPricePerDay(dto.getPricePerDay());
 				car.setAvailability(dto.getAvailability());
 				
-				
+				log.info("Adding new car: {}", dto);
+	
 		
 			return CarRepo.save(car);
 		}
 
-	    public Car addCar(Car car) {
-	        return CarRepo.save(car); // insert
-	    }
+	   
 
 	    @Override
 	    public Car updateCar(Car car) {
@@ -55,37 +57,43 @@ public  class CarServiceImp implements ICarService {
 
 	    
 	    public String deleteByCarId(int carId) throws CarNotFoundException {
+	    	  log.info("Fetching car by ID: {}", carId);
 	        if (!CarRepo.existsById(carId)) {
 	            throw new CarNotFoundException("Cannot delete. Car not found with ID: " + carId);
 	        }
 	        CarRepo.deleteById(carId);
+	        log.debug("Car deleted successfully with ID: {}", carId);
 	        return "Car deleted successfully";
 	    }
 
 
 	  
 	    public List<Car> getAllCars() {
+	    	log.info("Fetching all cars");
 	        return CarRepo.findAll();
 	    }
 
 	    
 	    public List<Car> getByBrand(String brand) {
+	    	 log.info("Fetching cars by brand: {}", brand);
 	        return CarRepo.findByBrand(brand);
 	    }
 
 	   
-	    public List<Car> getByAvailability(Car.Availability availability) {
-	        return CarRepo.findByAvailability(availability);
-	    }
-
 	    
 	    public List<Car> getByPriceLessThan(double price) {
+	        log.info("Fetching cars with price less than {}", price);
+
 	        return CarRepo.findByPricePerDayLessThan(price);
 	    }
 
 	    public List<Car> findAffordableCarsSortedByPrice(double price) {
 	        return CarRepo.findAffordableCarsSortedByPrice(price);
 	    }
+
+
+
+		
 
 		
 	}

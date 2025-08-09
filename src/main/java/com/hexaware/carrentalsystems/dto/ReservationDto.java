@@ -2,6 +2,7 @@ package com.hexaware.carrentalsystems.dto;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hexaware.carrentalsystems.entities.Car.Availability;
 import com.hexaware.carrentalsystems.entities.Reservation.Status;
 
@@ -28,11 +29,11 @@ public class ReservationDto {
     @Max(value=99)
     private int carId;
 
-    //@JsonFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern = "MM/dd/yyyy")
     @Future(message = "Pickup date must be in the future")
     private Date pickupDate;
 
-    //@JsonFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern = "MM/dd/yyyy")
     @Future(message = "Drop-off date must be in the future")
     private Date dropoffDate;
 

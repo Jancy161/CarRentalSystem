@@ -11,4 +11,5 @@ public interface IReservationService {
     Reservation getByReservationId(int reservationId);
     List<Reservation> getAllReservations();
     String deleteByReservationId(int reservationId);
+    List<Reservation> getByReservationGreaterThan( int totalAmount);
 }

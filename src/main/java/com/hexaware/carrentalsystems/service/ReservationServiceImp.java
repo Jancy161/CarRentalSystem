@@ -17,6 +17,8 @@ import com.hexaware.carrentalsystems.repository.ICarRepository;
 import com.hexaware.carrentalsystems.repository.IReservationRepository;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class ReservationServiceImp implements IReservationService {
 
@@ -31,8 +33,16 @@ public class ReservationServiceImp implements IReservationService {
 
     @Override
     public Reservation addReservation(ReservationDto dto) {
-        User user = UserRepo.findById(dto.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found"));
-        Car car = CarRepo.findById(dto.getCarId()).orElseThrow(() -> new CarNotFoundException("Car not found"));
+        log.info("Adding new reservation: {}", dto);
+
+        User user = UserRepo.findById(dto.getUserId()).orElseThrow(() -> {
+            log.error("User not found with ID: {}", dto.getUserId());
+            return new UserNotFoundException("User not found");
+        });
+        Car car = CarRepo.findById(dto.getCarId()).orElseThrow(() -> {
+            log.error("Car not found with ID: {}", dto.getCarId());
+            return new CarNotFoundException("Car not found");
+        });
 
         Reservation res = new Reservation();
         res.setReservationId(dto.getReservationId());
@@ -49,28 +59,43 @@ public class ReservationServiceImp implements IReservationService {
 
     @Override
     public Reservation updateReservation(Reservation reservation) {
+        log.info("Updating reservation with ID: {}", reservation.getReservationId());
+
         return repo.save(reservation);
     }
 
     @Override
     public Reservation getByReservationId(int reservationId) {
+        log.info("Fetching reservation with ID: {}", reservationId);
+
         return repo.findById(reservationId)
                    .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with ID: " + reservationId));
     }
 
     @Override
     public List<Reservation> getAllReservations() {
+        log.info("Fetching all reservations");
+
         return repo.findAll();
     }
 
     @Override
     public String deleteByReservationId(int reservationId) {
+        log.info("Deleting reservation with ID: {}", reservationId);
+
     	if (repo.existsById(reservationId)) {
     	 repo.deleteById(reservationId);
     	 return "Reservation deleted";
     	 } else {
     	        throw  new ReservationNotFoundException("Reservation not found with ID: " + reservationId);
     }
-    }  
+    }
+
+
+	@Override
+	public List<Reservation> getByReservationGreaterThan(int totalAmount) {
+		
+		return repo.findByReservationGreaterThan(totalAmount);
+	}  
 }
    

@@ -13,4 +13,5 @@ public interface IUserService {
     User getByEmail(String email);
     List<User> getByName(String name);
     List<User> getAllUsers();
+    List<User> getByNameStartingWith(String name);
 }

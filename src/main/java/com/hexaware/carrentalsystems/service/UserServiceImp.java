@@ -10,8 +10,11 @@ import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.entities.User;
 import com.hexaware.carrentalsystems.exceptions.UserNotFoundException;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
-import com.hexaware.carrentalsystems.dto.UserDto;
 
+import lombok.extern.slf4j.Slf4j;
+
+import com.hexaware.carrentalsystems.dto.UserDto;
+@Slf4j
 @Service
 public class UserServiceImp implements IUserService {
 
@@ -20,7 +23,8 @@ public class UserServiceImp implements IUserService {
     
     @Override 
     public User addUser(UserDto dto) {
-		
+        log.info("Adding new user: {}", dto);
+
 		User user = new User();
 		
 		user.setUserId(dto.getUserId());
@@ -33,41 +37,60 @@ public class UserServiceImp implements IUserService {
 	
 		return UserRepo.save(user);
 	}
-
-    public User addUser(User user) {
-        return UserRepo.save(user);
-    }
+	/*
+	 * public User addUser(User user) {
+	 * 
+	 * return UserRepo.save(user); }
+	 */
 
     @Override
     public User updateUser(User user) {
+        log.info("Updating user with ID: {}", user.getUserId());
+
         return UserRepo.save(user);
     }
 
     @Override
     public User getByUserId(int userId) {
+        log.info("Fetching user by ID: {}", userId);
+
         return UserRepo.findById(userId)
                    .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
 
     @Override
     public String deleteByUserId(int userId) {
+        log.info("Deleting user with ID: {}", userId);
+
     	UserRepo.deleteById(userId);
         return "User deleted successfully";
     }
 
     @Override
     public User getByEmail(String email) {
+        log.info("Fetching user by email: {}", email);
+
         return UserRepo.findByEmail(email)
                    .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
     @Override
     public List<User> getByName(String name) {
+        log.info("Fetching users by name: {}", name);
+
         return UserRepo.findByName(name);
     }
 
     @Override
     public List<User> getAllUsers() {
+        log.info("Fetching all users");
+
         return UserRepo.findAll();
     }
+
+	@Override
+	public List<User> getByNameStartingWith(String name) {
+		
+		return UserRepo.findByNameStartingwith(name);
+	}
 }

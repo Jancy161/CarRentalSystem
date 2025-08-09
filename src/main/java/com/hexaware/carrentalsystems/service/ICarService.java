@@ -15,7 +15,6 @@ public interface ICarService {
     public List<Car> getAllCars();
 
     public List<Car> getByBrand(String brand);
-    public List<Car> getByAvailability(Car.Availability availability);
     public List<Car> getByPriceLessThan(double price);
     public List<Car> findAffordableCarsSortedByPrice(double price);
 	public Car addCar(CarDto dto);

@@ -10,6 +10,8 @@ import com.hexaware.carrentalsystems.entities.Payment;
 import com.hexaware.carrentalsystems.service.IPaymentService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 
 @RestController
 @RequestMapping("/api/payments")
@@ -20,21 +22,35 @@ public class PaymentRestController {
 
     @PostMapping("/insert")
     public Payment addPayment(@RequestBody @Valid PaymentDto dto) {
+        log.info("Received request to add payment: {}", dto);
+
         return service.addPayment(dto);
     }
 
-    @GetMapping("/getbyid/{id}")
-    public Payment getPaymentById(@PathVariable int id) {
-        return service.getPaymentById(id);
+    @GetMapping("/getbyid/{paymentId}")
+    public Payment getPaymentById(@PathVariable int paymentId) {
+        log.info("Received request to get payment with ID: {}", paymentId);
+
+        return service.getPaymentById(paymentId);
     }
 
     @GetMapping("/getall")
     public List<Payment> getAllPayments() {
+        log.info("Received request to fetch all payments");
+
         return service.getAllPayments();
     }
 
-    @DeleteMapping("/deletebyid/{id}")
-    public String deletePayment(@PathVariable int id) {
-        return service.deletePayment(id);
+    @DeleteMapping("/deletebyid/{paymentId}")
+    public String deletePayment(@PathVariable int paymentId) {
+        log.info("Received request to delete payment with ID: {}", paymentId);
+
+        return service.deletePayment(paymentId);
+    }
+    
+    @GetMapping("/getbymethodandstatus/{method}/{status}")
+    
+    	public List<Payment> getByMethodAndStatus(@PathVariable String method, @PathVariable String status){
+    	return service.getByMethodAndStatus(method, status);
     }
 }

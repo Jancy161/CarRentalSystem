@@ -3,6 +3,7 @@ package com.hexaware.carrentalsystems.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.carrentalsystems.dto.CarDto;
@@ -10,6 +11,7 @@ import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.entities.User;
 import com.hexaware.carrentalsystems.exceptions.UserNotFoundException;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,9 +22,12 @@ public class UserServiceImp implements IUserService {
 
     @Autowired
     private IUserRepository UserRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @Override 
     public User addUser(UserDto dto) {
+    	
         log.info("Adding new user: {}", dto);
 
 		User user = new User();
@@ -31,8 +36,9 @@ public class UserServiceImp implements IUserService {
 		user.setName(dto.getName());
 		user.setEmail(dto.getEmail());
 		user.setPassword(dto.getPassword());
+		user.setRole(dto.getRole());
 			
-			
+		 user.setPassword(passwordEncoder.encode(user.getPassword()));	
 			
 	
 		return UserRepo.save(user);
@@ -43,11 +49,22 @@ public class UserServiceImp implements IUserService {
 	 * return UserRepo.save(user); }
 	 */
 
+   
+    
     @Override
-    public User updateUser(User user) {
-        log.info("Updating user with ID: {}", user.getUserId());
+    public User updateUser(int userId,UserDto dto) {
+    	log.info("Updating user with ID: {}");
+       User existingUser = UserRepo.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
 
-        return UserRepo.save(user);
+        
+       existingUser.setUserId(dto.getUserId());
+       existingUser.setName(dto.getName());
+       existingUser.setEmail(dto.getEmail());
+       existingUser.setPassword(dto.getPassword());
+       existingUser.setRole(dto.getRole());
+        
+        return UserRepo.save(existingUser);
     }
 
     @Override

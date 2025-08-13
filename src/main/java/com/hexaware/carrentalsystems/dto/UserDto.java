@@ -21,4 +21,7 @@ public class UserDto {
 
 	   @Pattern(regexp ="[A-Z]...[a-z]{3}")
 	    private String password;
+	   
+	   @Pattern(regexp = "User|Admin")
+	   private String role; //User, Admin
 }

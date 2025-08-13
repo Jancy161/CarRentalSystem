@@ -30,11 +30,11 @@ public class UserRestController {
    
     
 
-    @PutMapping("/update")
-    public User updateUser(@RequestBody User user) {
+    @PutMapping("/update/{userId}")
+    public User updateUser(@PathVariable int userId,@RequestBody @Valid UserDto dto) {
         log.info("Received request to fetch user with ID: {}");
 
-        return service.updateUser(user);
+        return service.updateUser(userId, dto);
     }
 
     @GetMapping("/getbyid/{userId}")

@@ -4,6 +4,7 @@ package com.hexaware.carrentalsystems.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.entities.Car;
@@ -26,6 +27,7 @@ public class CarRestController {
 	    @PostMapping("/insert")
 	    public Car addCar(@RequestBody @Valid CarDto dto) {
 	    	 log.info("Received request to add new car: {}", dto);
+
 	        return service.addCar(dto);
 	    }
 	    
@@ -39,15 +41,18 @@ public class CarRestController {
 	    }
 
 	    @GetMapping("/getbyid/{carId}")
+	    @PreAuthorize("hasAuthority('User')")
 	    public Car getByCarId(@PathVariable int carId) {
 	        log.info("Received request to fetch car by ID: {}", carId);
 
 	        return service.getByCarId(carId);
 	    }
+	   
 
 	    @GetMapping("/getall")
+	    @PreAuthorize("hasAuthority('Admin')")
 	    public List<Car> getAllCars() {
-	    	 log.info("Fetching all cars");
+	        log.info("Fetching all cars");
 	        return service.getAllCars();
 	    }
 

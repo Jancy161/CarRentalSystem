@@ -7,7 +7,7 @@ import com.hexaware.carrentalsystems.entities.User;
 
 public interface IUserService {
     public User addUser(UserDto dto);
-    public User updateUser(User user);
+    public User updateUser(int userId, UserDto dto);
     public User getByUserId(int userId);
     public String deleteByUserId(int userId);
     List <User> getByEmail(String email);

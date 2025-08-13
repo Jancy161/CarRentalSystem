@@ -15,8 +15,8 @@ import java.util.Date;
 @Entity
 @Table(name = "users")
 public class User {
+	
     @Id
-    
     private int userId;
 
     private String name;
@@ -26,6 +26,8 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    
+    private String role; //User, Admin
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "user-reservation")

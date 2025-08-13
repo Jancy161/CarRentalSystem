@@ -3,6 +3,7 @@ package com.hexaware.carrentalsystems.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.dto.FeedbackDto;
@@ -20,6 +21,7 @@ public class FeedbackRestController {
     private IFeedbackService service;
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Feedback addFeedback(@RequestBody @Valid FeedbackDto dto) {
         log.info("Received request to add feedback: {}", dto);
 
@@ -27,6 +29,7 @@ public class FeedbackRestController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public List<Feedback> getAll() {
         log.info("Received request to fetch all feedback");
 
@@ -34,6 +37,7 @@ public class FeedbackRestController {
     }
 
     @GetMapping("/{feedbackId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Feedback getById(@PathVariable int feedbackId) {
         log.info("Received request to fetch feedback with ID: {}", feedbackId);
 
@@ -41,6 +45,7 @@ public class FeedbackRestController {
     }
 
     @DeleteMapping("/delete/{feedbackId}")
+    @PreAuthorize("hasAuthority('Admin')")
     public String delete(@PathVariable int feedbackId) {
         log.info("Received request to delete feedback with ID: {}", feedbackId);
 
@@ -48,6 +53,7 @@ public class FeedbackRestController {
     }
     
     @GetMapping("/getorderbyrating")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     
     public List<Feedback> getFeedbacksOrderByRating(){
     	log.info("Ordering feedbacks by rating...");

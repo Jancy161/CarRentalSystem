@@ -25,6 +25,7 @@ public class CarRestController {
 	    ICarService service;
 
 	    @PostMapping("/insert")
+	    @PreAuthorize("hasAuthority('Admin')")
 	    public Car addCar(@RequestBody @Valid CarDto dto) {
 	    	 log.info("Received request to add new car: {}", dto);
 
@@ -34,6 +35,7 @@ public class CarRestController {
 			  
 
 	    @PutMapping("/update")
+	    @PreAuthorize("hasAuthority('Admin')")
 	    public Car updateCar(@RequestBody Car car) {
 	        log.info("Received request to update car with ID: {}", car.getCarId());
 
@@ -41,7 +43,7 @@ public class CarRestController {
 	    }
 
 	    @GetMapping("/getbyid/{carId}")
-	    @PreAuthorize("hasAuthority('User')")
+	    @PreAuthorize("hasAnyAuthority('Admin','User')")
 	    public Car getByCarId(@PathVariable int carId) {
 	        log.info("Received request to fetch car by ID: {}", carId);
 
@@ -50,13 +52,14 @@ public class CarRestController {
 	   
 
 	    @GetMapping("/getall")
-	    @PreAuthorize("hasAuthority('Admin')")
+	    @PreAuthorize("hasAnyAuthority('Admin','User')")
 	    public List<Car> getAllCars() {
 	        log.info("Fetching all cars");
 	        return service.getAllCars();
 	    }
 
 	    @DeleteMapping("/deletebyid/{carId}")
+	    @PreAuthorize("hasAuthority('Admin')")
 	    public String deleteByCarId(@PathVariable int carId) {
 	        log.info("Received request to delete car with ID: {}", carId);
 
@@ -64,6 +67,7 @@ public class CarRestController {
 	    }
 
 	    @GetMapping("/getbybrand/{brand}")
+	    @PreAuthorize("hasAnyAuthority('Admin','User')")
 	    public List<Car> getByBrand(@PathVariable String brand) {
 	        log.info("Fetching cars by brand: {}", brand);
 
@@ -74,6 +78,7 @@ public class CarRestController {
 	  
 
 	    @GetMapping("/getbyprice/{price}")
+	    @PreAuthorize("hasAnyAuthority('Admin','User')")
 	    public List<Car> getByPriceLessThan(@PathVariable double price) {
 	        log.info("Fetching cars with price less than {}", price);
 
@@ -81,6 +86,7 @@ public class CarRestController {
 	    }
 
 	    @GetMapping("/getaffordable/orderbyprice/{price}")
+	    @PreAuthorize("hasAnyAuthority('Admin','User')")
 	    public List<Car> getAffordableSorted(@PathVariable double price) {
 	        log.info("Fetching affordable cars sorted by price, price threshold: {}", price);
 

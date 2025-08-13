@@ -3,6 +3,7 @@ package com.hexaware.carrentalsystems.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.dto.ReservationDto;
@@ -20,6 +21,7 @@ public class ReservationRestController {
     private IReservationService service;
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Reservation add(@RequestBody @Valid ReservationDto dto) {
         log.info("Received request to add reservation: {}", dto);
 
@@ -27,6 +29,7 @@ public class ReservationRestController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Reservation updateReservation(@RequestBody Reservation reservation) {
         log.info("Received request to update reservation with ID: {}", reservation.getReservationId());
 
@@ -34,6 +37,7 @@ public class ReservationRestController {
     }
 
     @GetMapping("/getbyid/{reservationId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Reservation getById(@PathVariable int reservationId) {
         log.info("Received request to fetch reservation with ID: {}", reservationId);
 
@@ -41,6 +45,7 @@ public class ReservationRestController {
     }
 
     @DeleteMapping("/deletebyid/{reservationId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public String deleteById(@PathVariable int reservationId) {
         log.info("Received request to delete reservation with ID: {}", reservationId);
 
@@ -48,6 +53,8 @@ public class ReservationRestController {
     }
 
     @GetMapping("/getall")
+    @PreAuthorize("hasAuthority('Admin')")
+
     public List<Reservation> getAllReservations() {
         log.info("Received request to fetch all reservations");
 
@@ -55,6 +62,8 @@ public class ReservationRestController {
     }
     
     @GetMapping("/getresgreaterthan/{totalAmount}")
+    @PreAuthorize("hasAuthority('Admin')")
+
     public List<Reservation> getByReservationGreaterThan(@PathVariable int totalAmount){
     	
     	return service.getByReservationGreaterThan(totalAmount);

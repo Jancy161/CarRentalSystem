@@ -3,6 +3,7 @@ package com.hexaware.carrentalsystems.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.dto.CarDto;
@@ -22,6 +23,7 @@ public class UserRestController {
     IUserService service;
 
     @PostMapping("/insert")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public User addUser(@RequestBody @Valid UserDto dto) {
         log.info("Received request to add user: {}", dto);
 
@@ -31,6 +33,7 @@ public class UserRestController {
     
 
     @PutMapping("/update/{userId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public User updateUser(@PathVariable int userId,@RequestBody @Valid UserDto dto) {
         log.info("Received request to fetch user with ID: {}");
 
@@ -38,12 +41,14 @@ public class UserRestController {
     }
 
     @GetMapping("/getbyid/{userId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public User getByUserId(@PathVariable int userId) {
     	
         return service.getByUserId(userId);
     }
 
     @DeleteMapping("/deletebyid/{userId}")
+    @PreAuthorize("hasAuthority('Admin')")
     public String deleteByUserId(@PathVariable int userId) {
         log.info("Received request to delete user with ID: {}", userId);
 
@@ -51,6 +56,7 @@ public class UserRestController {
     }
 
     @GetMapping("/getbyemail/{email}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public List<User> getByEmail(@PathVariable String email) {
         log.info("Received request to fetch user by email: {}", email);
 
@@ -58,6 +64,7 @@ public class UserRestController {
     }
 
     @GetMapping("/getbyname/{name}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public User getByName(@PathVariable String name) {
         log.info("Received request to fetch users by name: {}", name);
 
@@ -65,12 +72,14 @@ public class UserRestController {
     }
 
     @GetMapping("/getall")
+    @PreAuthorize("hasAuthority('Admin')")
     public List<User> getAllUsers() {
         log.info("Received request to fetch all users");
 
         return service.getAllUsers();
     }
     @GetMapping("/getbynamestartingwith/{name}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public List<User> getByNameStartingWith(@PathVariable String name){
     	return service.getByNameStartingWith(name);
     }

@@ -3,6 +3,7 @@ package com.hexaware.carrentalsystems.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.dto.PaymentDto;
@@ -21,6 +22,7 @@ public class PaymentRestController {
     IPaymentService service;
 
     @PostMapping("/insert")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Payment addPayment(@RequestBody @Valid PaymentDto dto) {
         log.info("Received request to add payment: {}", dto);
 
@@ -28,6 +30,7 @@ public class PaymentRestController {
     }
 
     @GetMapping("/getbyid/{paymentId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public Payment getPaymentById(@PathVariable int paymentId) {
         log.info("Received request to get payment with ID: {}", paymentId);
 
@@ -35,6 +38,8 @@ public class PaymentRestController {
     }
 
     @GetMapping("/getall")
+    @PreAuthorize("hasAuthority('Admin')")
+
     public List<Payment> getAllPayments() {
         log.info("Received request to fetch all payments");
 
@@ -42,6 +47,8 @@ public class PaymentRestController {
     }
 
     @DeleteMapping("/deletebyid/{paymentId}")
+    @PreAuthorize("hasAuthority('Admin')")
+
     public String deletePayment(@PathVariable int paymentId) {
         log.info("Received request to delete payment with ID: {}", paymentId);
 
@@ -49,6 +56,8 @@ public class PaymentRestController {
     }
     
     @GetMapping("/getbymethodandstatus/{method}/{status}")
+    @PreAuthorize("hasAuthority('Admin')")
+
     
     	public List<Payment> getByMethodAndStatus(@PathVariable String method, @PathVariable String status){
     	return service.getByMethodAndStatus(method, status);

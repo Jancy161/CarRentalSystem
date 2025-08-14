@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ICarRepository extends JpaRepository<Car, Integer> {
 	 List<Car> findByBrand(String brand);
 	    
-	    List<Car> findByAvailability(Car.Availability availability);
+	    List<Car> findByAvailability(String availability);
 
 	    List<Car> findByPricePerDayLessThan(double price);
 

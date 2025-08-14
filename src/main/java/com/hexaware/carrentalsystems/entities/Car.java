@@ -20,9 +20,9 @@ public class Car {
 	private String brand;
     private String model;
     private double pricePerDay;
-    @Enumerated(EnumType.STRING)
+    
     @Column(nullable = false)
-    private Availability availability;
+    private String availability;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "car-reservation")
@@ -32,9 +32,6 @@ public class Car {
     @JsonManagedReference(value = "car-feedback")
     private List<Feedback> feedbacks;
 
-    public enum Availability {
-        AVAILABLE,
-        BOOKED
-    }
+    
 
    }

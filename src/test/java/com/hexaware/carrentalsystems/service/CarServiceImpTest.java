@@ -3,7 +3,6 @@ package com.hexaware.carrentalsystems.service;
 
 import com.hexaware.carrentalsystems.dto.CarDto;
 import com.hexaware.carrentalsystems.entities.Car;
-import com.hexaware.carrentalsystems.entities.Car.Availability;
 
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ public class CarServiceImpTest {
         dto.setBrand("Kia");
         dto.setModel("Seltos");
         dto.setPricePerDay(2000.0);
-        dto.setAvailability(Availability.AVAILABLE);
+        dto.setAvailability("AVAILABLE");
 
         Car savedCar = carService.addCar(dto);
         assertNotNull(savedCar);

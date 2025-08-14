@@ -48,7 +48,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/deletebyid/{userId}")
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
     public String deleteByUserId(@PathVariable int userId) {
         log.info("Received request to delete user with ID: {}", userId);
 

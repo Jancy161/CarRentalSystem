@@ -30,19 +30,16 @@ public class Reservation {
     private Date dropoffDate;
     private double totalAmount;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+
+    private String status;
 
     @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "reservation-payment")
     private Payment payment;
 
-    
-    public enum Status {
-        ACTIVE,
-        CANCELLED,
-        COMPLETED
-    }
+	/*
+	 * public enum Status { ACTIVE, CANCELLED, COMPLETED }
+	 */
     
    
 }

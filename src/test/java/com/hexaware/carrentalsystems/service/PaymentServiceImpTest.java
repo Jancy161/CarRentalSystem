@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.hexaware.carrentalsystems.dto.PaymentDto;
 import com.hexaware.carrentalsystems.entities.Payment;
-import com.hexaware.carrentalsystems.entities.Payment.Method;
-import com.hexaware.carrentalsystems.entities.Payment.Status;
 import com.hexaware.carrentalsystems.exceptions.PaymentNotFoundException;
 
 import org.junit.jupiter.api.Test;
@@ -42,8 +40,8 @@ class PaymentServiceImpTest {
         dto.setPaymentId(604);
         dto.setReservationId(2);
         dto.setAmount(2000);
-        dto.setMethod(Method.UPI);
-        dto.setStatus(Status.SUCCESS);
+        dto.setMethod("UPI");
+        dto.setStatus("SUCCESS");
         service.addPayment(dto);
 
         String result = service.deletePayment(604);

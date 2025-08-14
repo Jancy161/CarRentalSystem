@@ -1,6 +1,6 @@
 package com.hexaware.carrentalsystems.dto;
 
-import com.hexaware.carrentalsystems.entities.Car.Availability;
+
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -31,8 +31,9 @@ public class CarDto {
 	    
 	 
 	@NotNull
-	@Schema(implementation = Availability.class, description = "Car availability status: AVAILABLE or BOOKED")
-	private Availability availability;
+	@Pattern(regexp = "AVAILABLE|BOOKED", 
+    message = "AVAILABLE or BOOKED")
+	private String availability;
 
 	
 

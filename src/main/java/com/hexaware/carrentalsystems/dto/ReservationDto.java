@@ -3,14 +3,12 @@ package com.hexaware.carrentalsystems.dto;
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hexaware.carrentalsystems.entities.Car.Availability;
-import com.hexaware.carrentalsystems.entities.Reservation.Status;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -41,7 +39,8 @@ public class ReservationDto {
     private double totalAmount;
 
     @NotNull
-	@Schema(implementation = Status.class, description = "Reservation status: ACTIVE or CANCELLED or COMPLETED")
-    private Status status;
+    @Pattern(regexp = "ACTIVE|CANCELLED|COMPLETED", 
+    message = "ACTIVE or CANCELLED or COMPLETED")     
+    private String status;
 
 }

@@ -23,21 +23,17 @@ public class Payment {
 
     private double amount;
 
-    @Enumerated(EnumType.STRING)
-    private Method method;
+   
+    private String method;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+   
+    private String status;
 
-    public enum Method {
-        CARD,
-        UPI
-    }
-
-    public enum Status {
-        SUCCESS,
-        FAILED
-    }
+	/*
+	 * public enum Method { CARD, UPI }
+	 * 
+	 * public enum Status { SUCCESS, FAILED }
+	 */
     
     
 }

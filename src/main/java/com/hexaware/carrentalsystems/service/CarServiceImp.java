@@ -1,7 +1,6 @@
 package com.hexaware.carrentalsystems.service;
 import com.hexaware.carrentalsystems.dto.CarDto;
 import com.hexaware.carrentalsystems.entities.Car;
-import com.hexaware.carrentalsystems.entities.Car.Availability;
 import com.hexaware.carrentalsystems.exceptions.CarNotFoundException;
 
 import java.util.List;

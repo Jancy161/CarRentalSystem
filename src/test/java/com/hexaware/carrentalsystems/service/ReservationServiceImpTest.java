@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.carrentalsystems.dto.ReservationDto;
 import com.hexaware.carrentalsystems.entities.Reservation;
-import com.hexaware.carrentalsystems.entities.Reservation.Status;
 
 @SpringBootTest
 class ReservationServiceImpTest {
@@ -28,7 +27,7 @@ class ReservationServiceImpTest {
         dto.setPickupDate(Date.valueOf("2025-08-10"));
         dto.setDropoffDate(Date.valueOf("2025-08-12"));
         dto.setTotalAmount(5400); // should ideally be calculated
-        dto.setStatus(Status.ACTIVE);
+        dto.setStatus("ACTIVE");
 
         Reservation result = service.addReservation(dto);
         assertNotNull(result);
@@ -44,7 +43,7 @@ class ReservationServiceImpTest {
         dto.setPickupDate(Date.valueOf("2025-08-10"));
         dto.setDropoffDate(Date.valueOf("2025-08-12"));
         dto.setTotalAmount(5400);
-        dto.setStatus(Status.ACTIVE);
+        dto.setStatus("ACTIVE");
 
         Exception ex = assertThrows(RuntimeException.class, () -> service.addReservation(dto));
         assertTrue(ex.getMessage().contains("User not found"));
@@ -77,7 +76,7 @@ class ReservationServiceImpTest {
         dto.setPickupDate(Date.valueOf("2025-08-10"));
         dto.setDropoffDate(Date.valueOf("2025-08-11"));
         dto.setTotalAmount(2700);
-        dto.setStatus(Status.ACTIVE);
+        dto.setStatus("ACTIVE");
         service.addReservation(dto);
 
         String msg = service.deleteByReservationId(800);

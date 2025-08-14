@@ -53,7 +53,7 @@ public class SecurityConfig {
             .cors(cors -> {}) // configure CORS if needed
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/login",
+                    "/auth/**",
                     "/api/users/**",
                     "/api/cars/getall",
                     "/v3/api-docs/**",

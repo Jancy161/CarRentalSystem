@@ -1,5 +1,58 @@
-package com.hexaware.carrentalsystems.controller;
+/*
+ * package com.hexaware.carrentalsystems.controller;
+ * 
+ * 
+ * import org.slf4j.Logger; import org.slf4j.LoggerFactory; import
+ * org.springframework.beans.factory.annotation.Autowired; import
+ * org.springframework.security.authentication.AuthenticationManager; import
+ * org.springframework.security.authentication.
+ * UsernamePasswordAuthenticationToken; import
+ * org.springframework.security.core.Authentication; import
+ * org.springframework.security.core.userdetails.UsernameNotFoundException;
+ * import org.springframework.web.bind.annotation.PostMapping; import
+ * org.springframework.web.bind.annotation.RequestBody; import
+ * org.springframework.web.bind.annotation.RequestMapping; import
+ * org.springframework.web.bind.annotation.RestController;
+ * 
+ * import com.hexaware.carrentalsystems.config.UserInfoUserDetailsService;
+ * import com.hexaware.carrentalsystems.dto.AuthRequest; import
+ * com.hexaware.carrentalsystems.entities.User; import
+ * com.hexaware.carrentalsystems.service.JwtService;
+ * 
+ * @RestController
+ * 
+ * @RequestMapping("/auth") public class AuthController {
+ * 
+ * @Autowired private UserInfoUserDetailsService service;
+ * 
+ * @Autowired private JwtService jwtService;
+ * 
+ * @Autowired private AuthenticationManager authenticationManager;
+ * 
+ * private final Logger logger = LoggerFactory.getLogger(AuthController.class);
+ * 
+ * 
+ * 
+ * @PostMapping("/login") public String authenticateAndGetToken(@RequestBody
+ * AuthRequest authRequest) {
+ * 
+ * Authentication authentication = authenticationManager.authenticate( new
+ * UsernamePasswordAuthenticationToken(authRequest.getUsername(),
+ * authRequest.getPassword()));
+ * 
+ * if (authentication.isAuthenticated()) { String token =
+ * jwtService.generateToken(authRequest.getUsername());
+ * logger.info("Generated Token: {}", token); return token; } else {
+ * logger.info("Invalid login attempt"); throw new
+ * UsernameNotFoundException("Name or Password is invalid / Invalid Request"); }
+ * } }
+ * 
+ * // return JWT token if login success
+ * 
+ * 
+ */
 
+package com.hexaware.carrentalsystems.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +61,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.config.UserInfoUserDetailsService;
 import com.hexaware.carrentalsystems.dto.AuthRequest;
+import com.hexaware.carrentalsystems.dto.UserDto;
 import com.hexaware.carrentalsystems.entities.User;
+import com.hexaware.carrentalsystems.repository.IUserRepository;
 import com.hexaware.carrentalsystems.service.JwtService;
 
 @RestController
@@ -31,10 +84,33 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private IUserRepository userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-   
+    // REGISTER ENDPOINT
+    @PostMapping("/register")
+    public String register(@RequestBody UserDto dto) {
+        if (!userRepo.findByEmail(dto.getEmail()).isEmpty()) {
+            return "User with this email already exists!";
+        }
+        User u = new User();
+        u.setUserId(dto.getUserId());
+        u.setName(dto.getName());
+        u.setEmail(dto.getEmail());
+        u.setPassword(passwordEncoder.encode(dto.getPassword()));
+        u.setRole(dto.getRole()); // Accepts Admin or User
 
+        userRepo.save(u);
+        logger.info("User registered successfully: {}", dto.getEmail());
+        return "User registered successfully!";
+    }
+
+    // LOGIN ENDPOINT
     @PostMapping("/login")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
 
@@ -46,12 +122,8 @@ public class AuthController {
             logger.info("Generated Token: {}", token);
             return token;
         } else {
-            logger.info("Invalid login attempt");
+            logger.warn("Invalid login attempt for username: {}", authRequest.getUsername());
             throw new UsernameNotFoundException("Name or Password is invalid / Invalid Request");
         }
     }
 }
-
-        // return JWT token if login success
-    
-

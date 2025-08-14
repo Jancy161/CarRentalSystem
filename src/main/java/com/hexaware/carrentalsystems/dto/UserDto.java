@@ -19,7 +19,7 @@ public class UserDto {
 	    @Email
 	    private String email;
 
-	   @Pattern(regexp ="[A-Z]...[a-z]{3}")
+	   @Pattern(regexp ="[A-Z]...[a-z]{1,3}")
 	    private String password;
 	   
 	   @Pattern(regexp = "User|Admin")

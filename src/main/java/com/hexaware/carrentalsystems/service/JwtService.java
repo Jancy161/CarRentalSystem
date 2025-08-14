@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     // Use your own strong secret key (Base64 encoded)
-    public static final String SECRET = "secret_key";
+    public static final String SECRET = " e8ef574a9b4ab8a5260c5c1bffbdf8626a142496be791624f8c6e775993d951d";
 
     // Generate token with claims and "name" as subject
     public String createToken(Map<String, Object> claims, String name) {

@@ -5,6 +5,7 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +29,7 @@ public class ReservationDto {
     private int carId;
 
     @JsonFormat(pattern = "MM/dd/yyyy")
-    @Future(message = "Pickup date must be in the future")
+    @FutureOrPresent
     private Date pickupDate;
 
     @JsonFormat(pattern = "MM/dd/yyyy")

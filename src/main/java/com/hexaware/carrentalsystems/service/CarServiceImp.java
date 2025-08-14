@@ -20,6 +20,7 @@ public class CarServiceImp implements ICarService {
 	    ICarRepository CarRepo;
 	 
 	 @Override
+	 //adding new car
 		public Car addCar(CarDto dto) {
 			
 			Car car = new Car();
@@ -39,6 +40,7 @@ public class CarServiceImp implements ICarService {
 	   
 
 	    @Override
+	    //update car details
 	    public Car updateCar(Car car) {
 	        if (!CarRepo.existsById(car.getCarId())) {
 	            throw new CarNotFoundException("Car not found with ID: " + car.getCarId());
@@ -48,7 +50,7 @@ public class CarServiceImp implements ICarService {
 
 
 	  
-	    
+	    //select car by car id
 	    public Car getByCarId(int carId) throws CarNotFoundException {
 	        return CarRepo.findById(carId)
 	                .orElseThrow(() -> new CarNotFoundException("Car not found with ID: " + carId));

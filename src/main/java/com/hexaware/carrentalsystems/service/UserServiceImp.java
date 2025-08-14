@@ -19,13 +19,14 @@ import com.hexaware.carrentalsystems.dto.UserDto;
 @Slf4j
 @Service
 public class UserServiceImp implements IUserService {
-
+//injecting
     @Autowired
     private IUserRepository UserRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
     
     @Override 
+    //add new user
     public User addUser(UserDto dto) {
     	
         log.info("Adding new user: {}", dto);
@@ -52,6 +53,7 @@ public class UserServiceImp implements IUserService {
    
     
     @Override
+    //update user details
     public User updateUser(int userId,UserDto dto) {
     	log.info("Updating user with ID: {}");
        User existingUser = UserRepo.findById(userId)
@@ -68,6 +70,7 @@ public class UserServiceImp implements IUserService {
     }
 
     @Override
+    //get user by id
     public User getByUserId(int userId) {
         log.info("Fetching user by ID: {}", userId);
 

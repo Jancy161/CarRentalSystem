@@ -32,6 +32,7 @@ public class ReservationServiceImp implements IReservationService {
     ICarRepository CarRepo;
 
     @Override
+    //add new reservation
     public Reservation addReservation(ReservationDto dto) {
         log.info("Adding new reservation: {}", dto);
 
@@ -65,6 +66,7 @@ public class ReservationServiceImp implements IReservationService {
     }
 
     @Override
+    // get reservation by id
     public Reservation getByReservationId(int reservationId) {
         log.info("Fetching reservation with ID: {}", reservationId);
 

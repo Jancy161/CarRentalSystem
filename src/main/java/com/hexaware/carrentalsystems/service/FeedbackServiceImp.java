@@ -32,6 +32,7 @@ public class FeedbackServiceImp implements IFeedbackService {
     private ICarRepository CarRepo;
     
     @Override
+    //adding feedback
     public Feedback addFeedback(FeedbackDto dto) {
     	log.info("Adding feedback...");
         Feedback feedback = new Feedback();
@@ -50,7 +51,7 @@ public class FeedbackServiceImp implements IFeedbackService {
     }
 
 
-   
+   //method to fetch all feedback
     @Override
     public List<Feedback> getAllFeedback() {
         log.info("Fetching all feedback records");
@@ -59,6 +60,7 @@ public class FeedbackServiceImp implements IFeedbackService {
     }
 
     @Override
+    //get by id
     public Feedback getFeedbackById(int feedbackId) {
         log.info("Fetching feedback with ID: {}", feedbackId);
 

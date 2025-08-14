@@ -27,6 +27,7 @@ public class PaymentServiceImp implements IPaymentService {
     IReservationRepository repo;
 
     @Override
+    //add new payment
     public Payment addPayment(PaymentDto dto) {
         log.info("Adding new payment: {}", dto);
 
@@ -44,6 +45,7 @@ public class PaymentServiceImp implements IPaymentService {
     }
 
     @Override
+    //retrieve by id
     public Payment getPaymentById(int paymentId) {
         log.info("Fetching payment with ID: {}", paymentId);
 
@@ -60,6 +62,7 @@ public class PaymentServiceImp implements IPaymentService {
     }
 
     @Override
+    //get all 
     public List<Payment> getAllPayments() {
         log.info("Fetching all payments");
 

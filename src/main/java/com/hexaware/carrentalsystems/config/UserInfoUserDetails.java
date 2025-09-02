@@ -13,12 +13,14 @@ import com.hexaware.carrentalsystems.entities.User;
 
 public class UserInfoUserDetails implements UserDetails {
 
-    private String name;
+    //private String name;
     private String password;
     private List<GrantedAuthority> authorities;
+	private String email;
 
     public UserInfoUserDetails(User user) {
-        this.name = user.getName();
+       // this.name = user.getName();
+        this.email=user.getEmail();
         this.password = user.getPassword();
         this.authorities = Arrays.stream(user.getRole().split(","))
                                  .map(SimpleGrantedAuthority::new)
@@ -37,7 +39,7 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override

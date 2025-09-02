@@ -14,6 +14,7 @@ import com.hexaware.carrentalsystems.dto.CarDto;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/cars")
 public class CarRestController {

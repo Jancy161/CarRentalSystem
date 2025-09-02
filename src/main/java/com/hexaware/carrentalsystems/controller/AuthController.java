@@ -2,6 +2,8 @@
 
 package com.hexaware.carrentalsystems.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import com.hexaware.carrentalsystems.dto.UserDto;
 import com.hexaware.carrentalsystems.entities.User;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
 import com.hexaware.carrentalsystems.service.JwtService;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -59,19 +61,35 @@ public class AuthController {
     }
 
     // LOGIN ENDPOINT
+	/*
+	 * @PostMapping("/login") public String authenticateAndGetToken(@RequestBody
+	 * AuthRequest authRequest) {
+	 * 
+	 * Authentication authentication = authenticationManager.authenticate( new
+	 * UsernamePasswordAuthenticationToken(authRequest.getUsername(),
+	 * authRequest.getPassword()));
+	 * 
+	 * if (authentication.isAuthenticated()) { String token =
+	 * jwtService.generateToken(authRequest.getUsername());
+	 * logger.info("Generated Token: {}", token); return token; } else {
+	 * logger.warn("Invalid login attempt for username: {}",
+	 * authRequest.getUsername()); throw new
+	 * UsernameNotFoundException("Name or Password is invalid / Invalid Request"); }
+	 * }//returns jwt if successfully authorised
+	 */
+    
     @PostMapping("/login")
-    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-
+    public Map<String, String> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
         if (authentication.isAuthenticated()) {
             String token = jwtService.generateToken(authRequest.getUsername());
             logger.info("Generated Token: {}", token);
-            return token;
+            return Map.of("token", token); // return JSON
         } else {
             logger.warn("Invalid login attempt for username: {}", authRequest.getUsername());
-            throw new UsernameNotFoundException("Name or Password is invalid / Invalid Request");
+            throw new UsernameNotFoundException("Email or Password is invalid / Invalid Request");
         }
-    }//returns jwt if successfully authorised
+    }
 }

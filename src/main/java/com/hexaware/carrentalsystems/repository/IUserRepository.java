@@ -20,6 +20,7 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
 	User findByName(String name);
 	
+	
 	/*
 	 * @Query("SELECT u fROM User WHERE u.name = ?1") User findByName(String name);
 	 * 

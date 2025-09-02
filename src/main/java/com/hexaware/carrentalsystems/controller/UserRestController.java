@@ -23,7 +23,7 @@ public class UserRestController {
     IUserService service;
 
     @PostMapping("/insert")
-    
+   // @PreAuthorize("hasAnyAuthority('Admin','User')")
     public User addUser(@RequestBody @Valid UserDto dto) {
         log.info("Received request to add user: {}", dto);
 

@@ -127,7 +127,9 @@ public class SecurityConfig {
             .cors(cors -> {})
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/**",
+                    "/auth/login",
+                    "/auth/register",
+                    "/api/feedback/**",
                     "/api/cars/getall",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",

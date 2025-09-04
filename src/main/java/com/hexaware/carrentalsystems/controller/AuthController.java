@@ -12,11 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.config.UserInfoUserDetailsService;
 import com.hexaware.carrentalsystems.dto.AuthRequest;
 import com.hexaware.carrentalsystems.dto.UserDto;
+import com.hexaware.carrentalsystems.dto.UserDto.OnCreate;
 import com.hexaware.carrentalsystems.entities.User;
 import com.hexaware.carrentalsystems.repository.IUserRepository;
 import com.hexaware.carrentalsystems.service.JwtService;
@@ -44,7 +46,7 @@ public class AuthController {
 
     // REGISTER ENDPOINT
     @PostMapping("/register")
-    public String register(@RequestBody UserDto dto) {
+    public String register(@Validated(OnCreate.class) @RequestBody UserDto dto) {
         if (!userRepo.findByEmail(dto.getEmail()).isEmpty()) {
             return "User with this email already exists!";
         }

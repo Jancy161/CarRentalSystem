@@ -66,12 +66,12 @@ public class ReservationServiceImp implements IReservationService {
     }
 
     @Override
-    // get reservation by id
-    public Reservation getByReservationId(int reservationId) {
-        log.info("Fetching reservation with ID: {}", reservationId);
+    // get reservation by id // parameters were reservation id 
+    public Reservation getReservationByUserId(int userId) {
+        log.info("Fetching reservation with ID: {}", userId);
 
-        return repo.findById(reservationId)
-                   .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with ID: " + reservationId));
+        return repo.findById(userId)
+                   .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with User ID: " + userId));
     }
 
     @Override

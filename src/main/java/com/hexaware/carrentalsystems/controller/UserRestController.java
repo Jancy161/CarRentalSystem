@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.dto.CarDto;
 import com.hexaware.carrentalsystems.dto.UserDto;
+import com.hexaware.carrentalsystems.dto.UserDto.OnUpdate;
 import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.entities.User;
 import com.hexaware.carrentalsystems.service.IUserService;
@@ -34,7 +36,7 @@ public class UserRestController {
 
     @PutMapping("/update/{userId}")
     @PreAuthorize("hasAnyAuthority('Admin','User')")
-    public User updateUser(@PathVariable int userId,@RequestBody @Valid UserDto dto) {
+    public User updateUser(@PathVariable int userId,@Validated(OnUpdate.class)@RequestBody @Valid UserDto dto) {
         log.info("Received request to fetch user with ID: {}");
 
         return service.updateUser(userId, dto);

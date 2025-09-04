@@ -20,7 +20,7 @@ public class CarDto {
 
 	
 	@Min(value = 5)
-	@Max(value = 99)
+	//@Max(value = 99)
 	    private int carId;
 	@Pattern(regexp = "[A-Z][a-z]{2,30}" )
 		private String brand;

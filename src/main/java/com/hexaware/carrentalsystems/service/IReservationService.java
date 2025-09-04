@@ -8,7 +8,7 @@ import com.hexaware.carrentalsystems.entities.Reservation;
 public interface IReservationService {
 	Reservation addReservation(ReservationDto dto);
     Reservation updateReservation(Reservation reservation);
-    Reservation getByReservationId(int reservationId);
+    Reservation getReservationByUserId(int userId);//reservationId
     List<Reservation> getAllReservations();
     String deleteByReservationId(int reservationId);
     List<Reservation> getByReservationGreaterThan( int totalAmount);

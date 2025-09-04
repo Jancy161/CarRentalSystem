@@ -36,12 +36,12 @@ public class ReservationRestController {
         return service.updateReservation(reservation);
     }
 
-    @GetMapping("/getbyid/{reservationId}")
+    @GetMapping("/getbyid/{userId}")//parameters were reservationId
     @PreAuthorize("hasAnyAuthority('Admin','User')")
-    public Reservation getById(@PathVariable int reservationId) {
-        log.info("Received request to fetch reservation with ID: {}", reservationId);
+    public Reservation getById(@PathVariable int userId) {
+        log.info("Received request to fetch reservation with ID: {}", userId);
 
-        return service.getByReservationId(reservationId);
+        return service.getReservationByUserId(userId);
     }
 
     @DeleteMapping("/deletebyid/{reservationId}")

@@ -2,6 +2,7 @@ package com.hexaware.carrentalsystems.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,12 +21,14 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+   // @JsonIgnoreProperties(value = "user-feedback")
     @JsonBackReference(value = "user-feedback")
     private User user;
 
 
     @ManyToOne
     @JoinColumn(name = "car_id")
+    //@JsonIgnoreProperties(value = "car-feedback")
     @JsonBackReference(value = "car-feedback")
     private Car car;
 

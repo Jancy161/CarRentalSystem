@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserDto {
+	
+	 public interface OnCreate {}
+	    public interface OnUpdate {}
+	    
 	@Min(value = 1)
-	@Max(value = 99)
+	//@Max(value = 99)
 	 private int userId;
 		@Pattern(regexp = "[A-Z][a-z]{1,15}")
 	    private String name;
@@ -19,8 +23,15 @@ public class UserDto {
 	    @Email
 	    private String email;
 
-	   @Pattern(regexp ="[A-Z]...[a-z]{1,3}")
-	    private String password;
+	    @Pattern(
+	    	    regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+	    	    message = "Password must contain uppercase, lowercase, digit, and special character",
+	    	    groups = OnCreate.class
+	    	)
+	    	private String password;
+
+
+	   
 	   
 	   @Pattern(regexp = "User|Admin")
 	   private String role; //User, Admin

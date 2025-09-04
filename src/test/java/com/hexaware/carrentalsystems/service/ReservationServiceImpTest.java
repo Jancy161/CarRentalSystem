@@ -53,9 +53,9 @@ class ReservationServiceImpTest {
    
     @Test
     void testGetByReservationId_Valid() {
-        Reservation res = service.getByReservationId(2);
+        Reservation res = service.getReservationByUserId(2);
         assertNotNull(res);
-        assertEquals(2, res.getReservationId());
+        assertEquals(2, res.getUser());
     }
 
    

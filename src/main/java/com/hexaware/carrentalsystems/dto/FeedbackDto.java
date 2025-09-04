@@ -12,11 +12,11 @@ public class FeedbackDto {
     private int feedbackId;
 
     @Min(value = 1)
-	@Max(value = 99)
+	//@Max(value = 199)
     private int userId;
 
     @Min(value = 5)
-	@Max(value = 99)
+	//@Max(value = 99)
     private int carId;
 
     @Min(value = 1)

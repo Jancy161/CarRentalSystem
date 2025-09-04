@@ -21,11 +21,11 @@ public class ReservationDto {
     private int reservationId;
 
     @Min(value=1)
-    @Max(value=99)
+   // @Max(value=99)
     private int userId;
 
     @Min(value=5)
-    @Max(value=99)
+   // @Max(value=99)
     private int carId;
 
     @JsonFormat(pattern = "MM/dd/yyyy")

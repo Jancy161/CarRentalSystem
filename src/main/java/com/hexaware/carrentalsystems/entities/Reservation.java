@@ -25,6 +25,7 @@ public class Reservation {
     @JoinColumn(name = "car_id")
     @JsonBackReference(value = "car-reservation")
     private Car car;
+    //private String carModel;
 
     private Date pickupDate;
     private Date dropoffDate;

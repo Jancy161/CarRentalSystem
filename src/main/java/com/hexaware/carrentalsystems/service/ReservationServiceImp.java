@@ -49,6 +49,7 @@ public class ReservationServiceImp implements IReservationService {
         res.setReservationId(dto.getReservationId());
         res.setUser(user);
         res.setCar(car);
+       // res.setCar(dto.getCarModel());
         res.setPickupDate(dto.getPickupDate());
         res.setDropoffDate(dto.getDropoffDate());
         res.setTotalAmount(dto.getTotalAmount());
@@ -65,14 +66,15 @@ public class ReservationServiceImp implements IReservationService {
         return repo.save(reservation);
     }
 
-    @Override
-    // get reservation by id // parameters were reservation id 
-    public Reservation getReservationByUserId(int userId) {
-        log.info("Fetching reservation with ID: {}", userId);
-
-        return repo.findById(userId)
-                   .orElseThrow(() -> new ReservationNotFoundException("Reservation not found with User ID: " + userId));
-    }
+	/*
+	 * @Override // get reservation by id // parameters were reservation id public
+	 * Reservation getReservationByUserId(int userId) {
+	 * log.info("Fetching reservation with ID: {}", userId);
+	 * 
+	 * return repo.findById(userId) .orElseThrow(() -> new
+	 * ReservationNotFoundException("Reservation not found with User ID: " +
+	 * userId)); }
+	 */
 
     @Override
     public List<Reservation> getAllReservations() {
@@ -99,5 +101,23 @@ public class ReservationServiceImp implements IReservationService {
 		
 		return repo.findByReservationGreaterThan(totalAmount);
 	}  
+	
+	//modify , cancel
+	
+	@Override
+	public List<Reservation> getReservationsByUserId(int userId) {
+	    User user = UserRepo.findById(userId)
+	              .orElseThrow(() -> new UserNotFoundException("User not found"));
+	    return repo.findByUser(user); // you’ll need this repo method
+	}
+
+	@Override
+	public Reservation cancelReservation(int reservationId) {
+	    Reservation res = repo.findById(reservationId)
+	              .orElseThrow(() -> new ReservationNotFoundException("Not found"));
+	    res.setStatus("CANCELLED");
+	    return repo.save(res);
+	}
+
 }
    

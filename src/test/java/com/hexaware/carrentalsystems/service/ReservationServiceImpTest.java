@@ -24,6 +24,9 @@ class ReservationServiceImpTest {
         dto.setReservationId(500);
         dto.setUserId(2);
         dto.setCarId(7);
+        //tryyy
+        //dto.setCarModel("Creta");
+        //dto.getCar().getModel(), 
         dto.setPickupDate(Date.valueOf("2025-08-10"));
         dto.setDropoffDate(Date.valueOf("2025-08-12"));
         dto.setTotalAmount(5400); // should ideally be calculated
@@ -51,12 +54,11 @@ class ReservationServiceImpTest {
 
 
    
-    @Test
-    void testGetByReservationId_Valid() {
-        Reservation res = service.getReservationByUserId(2);
-        assertNotNull(res);
-        assertEquals(2, res.getUser());
-    }
+	/*
+	 * @Test void testGetByReservationId_Valid() { Reservation res =
+	 * service.getReservationByUserId(2); assertNotNull(res); assertEquals(2,
+	 * res.getUser()); }
+	 */
 
    
 

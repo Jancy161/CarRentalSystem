@@ -1,6 +1,7 @@
 package com.hexaware.carrentalsystems.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservationDto {
 
-    @Min(1)
+
+	@Min(1)
     private int reservationId;
 
     @Min(value=1)
@@ -27,6 +29,9 @@ public class ReservationDto {
     @Min(value=5)
    // @Max(value=99)
     private int carId;
+    
+    //tryy
+    private String carModel; // ✅ so frontend can show model
 
     @JsonFormat(pattern = "MM/dd/yyyy")
     @FutureOrPresent

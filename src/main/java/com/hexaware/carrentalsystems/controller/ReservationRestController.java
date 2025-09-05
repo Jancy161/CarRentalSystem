@@ -35,14 +35,15 @@ public class ReservationRestController {
 
         return service.updateReservation(reservation);
     }
-
-    @GetMapping("/getbyid/{userId}")//parameters were reservationId
-    @PreAuthorize("hasAnyAuthority('Admin','User')")
-    public Reservation getById(@PathVariable int userId) {
-        log.info("Received request to fetch reservation with ID: {}", userId);
-
-        return service.getReservationByUserId(userId);
-    }
+	/*
+	 * @GetMapping("/getbyid/{userId}")//parameters were reservationId
+	 * 
+	 * @PreAuthorize("hasAnyAuthority('Admin','User')") public Reservation
+	 * getById(@PathVariable int userId) {
+	 * log.info("Received request to fetch reservation with ID: {}", userId);
+	 * 
+	 * return service.getReservationByUserId(userId); }
+	 */
 
     @DeleteMapping("/deletebyid/{reservationId}")
     @PreAuthorize("hasAnyAuthority('Admin','User')")
@@ -68,4 +69,29 @@ public class ReservationRestController {
     	
     	return service.getByReservationGreaterThan(totalAmount);
     }
+    
+    
+    //modify and cancel reservation
+ // ✅ get reservations for a specific user
+	
+	  @GetMapping("/getbyuserid/{userId}")
+	  
+	  @PreAuthorize("hasAnyAuthority('Admin','User')") public List<Reservation>
+	  getByUserId(@PathVariable int userId) { return
+	  service.getReservationsByUserId(userId); }
+
+	/*
+	 * @GetMapping("/getbyuserid/{userId}")
+	 * 
+	 * @PreAuthorize("hasAnyAuthority('Admin','User')") public List<ReservationDto>
+	 * getByUserId(@PathVariable int userId) { return
+	 * service.getReservationsByUserId(userId); }
+	 */
+    // ✅ cancel reservation by id
+    @PutMapping("/cancel/{reservationId}")
+    @PreAuthorize("hasAnyAuthority('Admin','User')")
+    public Reservation cancelReservation(@PathVariable int reservationId) {
+        return service.cancelReservation(reservationId);
+    }
+
 }

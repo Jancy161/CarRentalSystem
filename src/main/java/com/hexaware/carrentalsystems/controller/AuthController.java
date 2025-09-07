@@ -4,6 +4,7 @@ package com.hexaware.carrentalsystems.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,25 +49,20 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
-    @PutMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto dto) {
-        List<User> users = userRepo.findByEmail(dto.getEmail());
-        if (users.isEmpty()) {
+    @PutMapping("/auth/reset-password")
+    public ResponseEntity<String> resetPasswordSimple(@RequestBody Map<String, String> payload) {
+        String email = payload.get("email");
+        String newPassword = payload.get("newPassword");
+        List<User> userOpt = userRepo.findByEmail(email);
+        if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-
-        User user = users.get(0);
-
-        if (!user.getSecurityQuestion().equals(dto.getSecurityQuestion()) ||
-            !user.getSecurityAnswer().equalsIgnoreCase(dto.getSecurityAnswer())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Security question/answer mismatch");
-        }
-
-        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        User user = userOpt.get(0);
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepo.save(user);
-
-        return ResponseEntity.ok("Password reset successful!");
+        return ResponseEntity.ok("Password reset successfully!");
     }
+
 
     // REGISTER ENDPOINT
     @PostMapping("/register")

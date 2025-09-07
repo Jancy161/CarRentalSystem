@@ -130,6 +130,7 @@ public class SecurityConfig {
                     "/auth/login",
                     "/auth/register",
                     "/auth/reset-password",
+                    "/auth/**",
                     "/api/feedback/**",
                     "/api/cars/getall",
                     "/v3/api-docs/**",

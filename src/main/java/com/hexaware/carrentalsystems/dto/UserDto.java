@@ -35,4 +35,8 @@ public class UserDto {
 	   
 	   @Pattern(regexp = "User|Admin")
 	   private String role; //User, Admin
+	   
+	   // 👇 new fields
+	    private String securityQuestion;
+	    private String securityAnswer;
 }

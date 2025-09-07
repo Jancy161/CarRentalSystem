@@ -44,7 +44,16 @@ public class ReservationServiceImp implements IReservationService {
             log.error("Car not found with ID: {}", dto.getCarId());
             return new CarNotFoundException("Car not found");
         });
+//status check 
+        // ✅ Check if car is already booked
+        if ("BOOKED".equalsIgnoreCase(car.getAvailability())) {
+            throw new IllegalStateException("Car is already booked!");
+        }
 
+        // ✅ Mark car as booked
+        car.setAvailability("BOOKED");
+        CarRepo.save(car);
+//status check
         Reservation res = new Reservation();
         res.setReservationId(dto.getReservationId());
         res.setUser(user);
@@ -111,12 +120,30 @@ public class ReservationServiceImp implements IReservationService {
 	    return repo.findByUser(user); // you’ll need this repo method
 	}
 
+	/*
+	 * @Override public Reservation cancelReservation(int reservationId) {
+	 * Reservation res = repo.findById(reservationId) .orElseThrow(() -> new
+	 * ReservationNotFoundException("Not found")); res.setStatus("CANCELLED");
+	 * return repo.save(res); }
+	 */
+	
 	@Override
 	public Reservation cancelReservation(int reservationId) {
-	    Reservation res = repo.findById(reservationId)
-	              .orElseThrow(() -> new ReservationNotFoundException("Not found"));
-	    res.setStatus("CANCELLED");
-	    return repo.save(res);
+	    Reservation reservation = repo.findById(reservationId)
+	        .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+
+	    // ✅ Update reservation status
+	    reservation.setStatus("CANCELLED");
+	    repo.save(reservation);
+
+	    // ✅ Free the car
+	    Car car = reservation.getCar();
+	    if (car != null) {
+	        car.setAvailability("AVAILABLE");
+	        CarRepo.save(car);
+	    }
+
+	    return reservation;
 	}
 
 }

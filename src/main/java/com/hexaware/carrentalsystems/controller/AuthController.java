@@ -2,21 +2,26 @@
 
 package com.hexaware.carrentalsystems.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.hexaware.carrentalsystems.config.UserInfoUserDetailsService;
 import com.hexaware.carrentalsystems.dto.AuthRequest;
+import com.hexaware.carrentalsystems.dto.ResetPasswordDto;
 import com.hexaware.carrentalsystems.dto.UserDto;
 import com.hexaware.carrentalsystems.dto.UserDto.OnCreate;
 import com.hexaware.carrentalsystems.entities.User;
@@ -43,6 +48,25 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    @PutMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto dto) {
+        List<User> users = userRepo.findByEmail(dto.getEmail());
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User user = users.get(0);
+
+        if (!user.getSecurityQuestion().equals(dto.getSecurityQuestion()) ||
+            !user.getSecurityAnswer().equalsIgnoreCase(dto.getSecurityAnswer())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Security question/answer mismatch");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepo.save(user);
+
+        return ResponseEntity.ok("Password reset successful!");
+    }
 
     // REGISTER ENDPOINT
     @PostMapping("/register")

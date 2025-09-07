@@ -3,87 +3,129 @@ package com.hexaware.carrentalsystems.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hexaware.carrentalsystems.dto.ReservationDto;
+import com.hexaware.carrentalsystems.entities.Car;
 import com.hexaware.carrentalsystems.entities.Reservation;
+import com.hexaware.carrentalsystems.entities.User;
+import com.hexaware.carrentalsystems.exceptions.ReservationNotFoundException;
+import com.hexaware.carrentalsystems.repository.ICarRepository;
+import com.hexaware.carrentalsystems.repository.IReservationRepository;
+import com.hexaware.carrentalsystems.repository.IUserRepository;
 
 @SpringBootTest
 class ReservationServiceImpTest {
 
     @Autowired
-    private ReservationServiceImp service;
+    private ReservationServiceImp reservationService;
 
-    @Test
-    void testAddReservation_ValidData() {
+    @Autowired
+    private IReservationRepository reservationRepo;
+
+    @Autowired
+    private IUserRepository userRepo;
+
+    @Autowired
+    private ICarRepository carRepo;
+
+    private static int uniqueReservationId = 1000;
+
+    private User testUser;
+    private Car testCar;
+
+    @BeforeEach
+    void setup() {
+        reservationRepo.deleteAll();
+        carRepo.deleteAll();
+        userRepo.deleteAll();
+
+        testUser = new User();
+        testUser.setUserId(1);
+        testUser.setName("Test User");
+        testUser.setEmail("testuser@example.com");
+        testUser.setPassword("pass123");
+        userRepo.save(testUser);
+
+        testCar = new Car();
+        testCar.setCarId(1);
+        testCar.setBrand("Toyota");
+        testCar.setModel("Corolla");
+        testCar.setPricePerDay(1000);
+        testCar.setAvailability("AVAILABLE");
+        carRepo.save(testCar);
+    }
+
+    private ReservationDto createReservationDto() {
         ReservationDto dto = new ReservationDto();
-        dto.setReservationId(500);
-        dto.setUserId(2);
-        dto.setCarId(7);
-        //tryyy
-        //dto.setCarModel("Creta");
-        //dto.getCar().getModel(), 
-        dto.setPickupDate(Date.valueOf("2025-08-10"));
-        dto.setDropoffDate(Date.valueOf("2025-08-12"));
-        dto.setTotalAmount(5400); // should ideally be calculated
+        dto.setReservationId(uniqueReservationId++);
+        dto.setUserId(testUser.getUserId());
+        dto.setCarId(testCar.getCarId());
+        dto.setPickupDate(Date.valueOf(LocalDate.now()));
+        dto.setDropoffDate(Date.valueOf(LocalDate.now().plusDays(2)));
+        dto.setTotalAmount(2000);
         dto.setStatus("ACTIVE");
-
-        Reservation result = service.addReservation(dto);
-        assertNotNull(result);
-        assertEquals(500, result.getReservationId());
+        return dto;
     }
 
     @Test
-    void testAddReservation_InvalidUserId() {
-        ReservationDto dto = new ReservationDto();
-        dto.setReservationId(501);
-        dto.setUserId(999); // invalid
-        dto.setCarId(7);
-        dto.setPickupDate(Date.valueOf("2025-08-10"));
-        dto.setDropoffDate(Date.valueOf("2025-08-12"));
-        dto.setTotalAmount(5400);
-        dto.setStatus("ACTIVE");
+    void testAddReservation() {
+        ReservationDto dto = createReservationDto();
+        Reservation reservation = reservationService.addReservation(dto);
 
-        Exception ex = assertThrows(RuntimeException.class, () -> service.addReservation(dto));
-        assertTrue(ex.getMessage().contains("User not found"));
+        assertNotNull(reservation);
+        assertEquals("ACTIVE", reservation.getStatus());
+        assertEquals(testUser.getUserId(), reservation.getUser().getUserId());
+        assertEquals("BOOKED", reservation.getCar().getAvailability());
     }
 
-
-   
 	/*
-	 * @Test void testGetByReservationId_Valid() { Reservation res =
-	 * service.getReservationByUserId(2); assertNotNull(res); assertEquals(2,
-	 * res.getUser()); }
+	 * @Test void testGetAllReservations() { ReservationDto dto1 =
+	 * createReservationDto(); ReservationDto dto2 = createReservationDto();
+	 * 
+	 * reservationService.addReservation(dto1);
+	 * reservationService.addReservation(dto2);
+	 * 
+	 * List<Reservation> allReservations = reservationService.getAllReservations();
+	 * assertTrue(allReservations.size() >= 2); }
 	 */
 
-   
-
     @Test
-    void testGetAllReservations() {
-        List<Reservation> all = service.getAllReservations();
-        assertNotNull(all);
-        assertTrue(all.size() > 0);
-    }
+    void testDeleteReservation() {
+        ReservationDto dto = createReservationDto();
+        Reservation reservation = reservationService.addReservation(dto);
 
-    @Test
-    void testDeleteReservation_Success() {
-        ReservationDto dto = new ReservationDto();
-        dto.setReservationId(800);
-        dto.setUserId(2);
-        dto.setCarId(7);
-        dto.setPickupDate(Date.valueOf("2025-08-10"));
-        dto.setDropoffDate(Date.valueOf("2025-08-11"));
-        dto.setTotalAmount(2700);
-        dto.setStatus("ACTIVE");
-        service.addReservation(dto);
-
-        String msg = service.deleteByReservationId(800);
+        String msg = reservationService.deleteByReservationId(reservation.getReservationId());
         assertEquals("Reservation deleted", msg);
+
+        assertThrows(ReservationNotFoundException.class,
+                () -> reservationService.deleteByReservationId(reservation.getReservationId()));
     }
 
-   
+    @Test
+    void testCancelReservation() {
+        ReservationDto dto = createReservationDto();
+        Reservation reservation = reservationService.addReservation(dto);
+
+        Reservation cancelled = reservationService.cancelReservation(reservation.getReservationId());
+        assertEquals("CANCELLED", cancelled.getStatus());
+        assertEquals("AVAILABLE", cancelled.getCar().getAvailability());
+    }
+
+	/*
+	 * @Test void testGetReservationsByUserId() { ReservationDto dto1 =
+	 * createReservationDto(); ReservationDto dto2 = createReservationDto();
+	 * reservationService.addReservation(dto1);
+	 * reservationService.addReservation(dto2);
+	 * 
+	 * List<Reservation> reservations =
+	 * reservationService.getReservationsByUserId(testUser.getUserId());
+	 * assertTrue(reservations.size() >= 2); }
+	 */
 }

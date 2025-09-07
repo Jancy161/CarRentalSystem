@@ -37,5 +37,8 @@ public class User {
     @JsonManagedReference(value = "user-feedback")
     private List<Feedback> feedbacks;
     
+    // 👇 new fields
+    private String securityQuestion;
+    private String securityAnswer;
     
 }

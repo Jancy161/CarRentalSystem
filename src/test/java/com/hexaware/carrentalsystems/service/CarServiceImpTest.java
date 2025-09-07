@@ -1,68 +1,94 @@
 
 package com.hexaware.carrentalsystems.service;
 
+
+
 import com.hexaware.carrentalsystems.dto.CarDto;
 import com.hexaware.carrentalsystems.entities.Car;
-
+import com.hexaware.carrentalsystems.exceptions.CarNotFoundException;
+import com.hexaware.carrentalsystems.repository.ICarRepository;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class) // Optional, for controlling test execution order
 public class CarServiceImpTest {
 
     @Autowired
     private CarServiceImp carService;
 
+    @Autowired
+    private ICarRepository carRepo;
+
     @Test
-    @Order(1)
-    public void testAddCar() {
+    void testAddCar() {
         CarDto dto = new CarDto();
-        dto.setCarId(10);
-        dto.setBrand("Kia");
-        dto.setModel("Seltos");
-        dto.setPricePerDay(2000.0);
+        dto.setCarId(101);
+        dto.setBrand("Toyota");
+        dto.setModel("Corolla");
+        dto.setPricePerDay(3000);
         dto.setAvailability("AVAILABLE");
 
         Car savedCar = carService.addCar(dto);
+
         assertNotNull(savedCar);
-        assertEquals("Kia", savedCar.getBrand());
+        assertEquals("Toyota", savedCar.getBrand());
     }
 
     @Test
-    @Order(2)
-    public void testGetCarById_Success() {
-        Car car = carService.getByCarId(10);
-        assertNotNull(car);
-        assertEquals("Kia", car.getBrand());
-    }
+    void testGetByCarId() {
+        CarDto dto = new CarDto();
+        dto.setCarId(102);
+        dto.setBrand("Honda");
+        dto.setModel("Civic");
+        dto.setPricePerDay(3500);
+        dto.setAvailability("AVAILABLE");
 
-   
+        carService.addCar(dto);
 
-
-    @Test
-    @Order(3)
-    public void testGetAllCars() {
-        List<Car> cars = carService.getAllCars();
-        assertTrue(cars.size() > 0);
+        Car fetchedCar = carService.getByCarId(102);
+        assertNotNull(fetchedCar);
+        assertEquals("Civic", fetchedCar.getModel());
     }
 
     @Test
-    @Order(4)
-    public void testGetByBrand() {
-        List<Car> cars = carService.getByBrand("Hyundai");
-        assertTrue(cars.stream().allMatch(c -> c.getBrand().equals("Hyundai")));
+    void testUpdateCar() {
+        CarDto dto = new CarDto();
+        dto.setCarId(103);
+        dto.setBrand("Ford");
+        dto.setModel("Fiesta");
+        dto.setPricePerDay(2500);
+        dto.setAvailability("AVAILABLE");
+
+        carService.addCar(dto);
+
+        Car carToUpdate = carService.getByCarId(103);
+        carToUpdate.setPricePerDay(2700);
+
+        Car updatedCar = carService.updateCar(carToUpdate);
+        assertEquals(2700, updatedCar.getPricePerDay());
     }
 
-   
+    @Test
+    void testDeleteCar() {
+        CarDto dto = new CarDto();
+        dto.setCarId(104);
+        dto.setBrand("BMW");
+        dto.setModel("X1");
+        dto.setPricePerDay(5000);
+        dto.setAvailability("AVAILABLE");
+
+        carService.addCar(dto);
+
+        String message = carService.deleteByCarId(104);
+        assertEquals("Car deleted successfully", message);
+
+        assertThrows(CarNotFoundException.class, () -> carService.getByCarId(104));
+    }
 }
+

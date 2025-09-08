@@ -135,7 +135,10 @@ public class SecurityConfig {
                     "/api/cars/getall",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html"
+                    "/swagger-ui.html",
+                    "api/**","api/users/**",
+                    "api/payments/**",
+                    "api/reservations/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

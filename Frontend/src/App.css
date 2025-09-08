@@ -1,0 +1,6 @@
+/*.container { max-width: 800px; margin: 0 ; padding: 0px; }
+.navbar { background: #333; color: white; padding: 10px; display: flex; justify-content: space-around; }
+.navbar a, .navbar button { color: white; text-decoration: none; margin: 0 10px; }
+.auth-form { max-width: 400px; margin: 50px auto; }
+.auth-form input { display: block; margin: 10px 0; width: 100%; }
+.error { color: red; }*/

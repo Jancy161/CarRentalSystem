@@ -1,4 +1,4 @@
-// src/pages/AdminDashboard.js
+﻿// src/pages/AdminDashboard.js
 import React, { useEffect, useState } from "react";
 import { addCar, updateCar, deleteCar, getAllCars } from "../services/carService";
 import { getAllUsers, fetchUserById, deleteUser, getUserByName} from "../services/userService";
@@ -363,9 +363,9 @@ export default function AdminDashboard() {
               <button className="btn btn-sm btn-outline-secondary" onClick={async()=>setPayments(await getByMethodAndStatus('CARD','SUCCESS'))}>CARD & SUCCESS</button>
             </div>
             <div className="table-responsive">
-              <table className="table table-sm table-striped"><thead><tr><th>ID</th><th>Res</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+              <table className="table table-sm table-striped"><thead><tr><th>ID</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
                 <tbody>
-                  {payments.map(p => (<tr key={p.paymentId}><td>{p.paymentId}</td><td>{p.reservationId}</td><td>{p.amount}</td><td>{p.method}</td><td>{p.status}</td></tr>))}
+                  {payments.map(p => (<tr key={p.paymentId}><td>{p.paymentId}</td><td>{p.amount}</td><td>{p.method}</td><td>{p.status}</td></tr>))}
                 </tbody>
               </table>
             </div>
